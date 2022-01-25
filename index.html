@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+    <head>
+        <title>IMMovie</title>
+        
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+       
+        <link rel="shortcut icon" href="img/logo.png" />
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="style.css" />
+    </head>
+    <body>
+        <div id="app">
+
+           
+                <nav class="navbar-expand-lg navbar navbar-dark bg-dark">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" @click="toHome()" href="#Home"><img src="img/logo.png" id="logo" ></a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" @click="toHome()" href="#Home">Home</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Stasera in TV</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="http://www.lazampadikira.it/Televideo/" target="_blank">Versione 1</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" aria-current="page" href="https://spike-taass.herokuapp.com/" target="_blank">Versione 2</a></li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                            <form class="d-flex">
+
+                                <select class="form-select" aria-label="Default select example" id="tipo" style="margin-right: 20px;">
+                                    <option selected value="">Tutti </option>
+                                    <option value="movie">Movie</option>
+                                    <option value="series">Series</option>
+                                    <option value="episode">Episode</option>
+                                    <option value="game">Game</option>
+                                </select> 
+                                
+                                <input class="form-control me-2" type="search" placeholder="Cerca" aria-label="Cerca" id="cerca">
+                                <button class="btn btn-outline-success" @click="cerca()" >Cerca </button>
+                            </form>
+                        </div>
+                    </div>
+                </nav>
+
+                 <!-- List -->
+            <div v-if="seen_list" style="text-align: center;">
+
+               <!-- <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" >
+                    <div class="carousel-inner">
+                        <div class="carousel-item active" data-bs-interval="4000">
+                            <img src="img/alien.jpeg" class="d-block w-100" alt="Alien" >
+                          </div>
+                          <div class="carousel-item" data-bs-interval="4000">
+                            <img src="img/casablanca.jpeg" class="d-block w-100" alt="Casablanca">
+                          </div>
+                          <div class="carousel-item" data-bs-interval="4000">
+                            <img src="img/inception.jpeg" class="d-block w-100" alt="Inception" >
+                          </div>
+                          <div class="carousel-item" data-bs-interval="4000">
+                            <img src="img/lupi.jpg" class="d-block w-100" alt="Balla coi lupi" >
+                          </div>
+                          <div class="carousel-item" data-bs-interval="4000">
+                            <img src="img/meccanica.jpeg" class="d-block w-100" alt="Arancia meccanica" >
+                          </div>
+                          <div class="carousel-item" data-bs-interval="4000">
+                            <img src="img/300.jpeg" class="d-block w-100" alt="300" >
+                          </div>
+                        </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
+
+                </div>-->
+                <img src="img/hal9000.png" id="hal" alt="hal9000" >
+                <br><br>
+                <!--<p style="color: rgb(124, 71, 71);">Hal-9000 al tuo servizio!</p>-->
+
+
+                <div v-if="film_list.length != 0" class="d-grid gap-2">
+                    <h2 style="color: aliceblue;"><u>Risultati:</u> {{n_result}}</h2>
+                </div>
+
+                <div v-for="(index,film) in film_list" class="card" style="width: 15rem;">
+                    <a @click="getDetail(film)"><img :src="film_list[film].Poster" class="card-img-top" alt="film_list[film].Poster" onerror="this.src='img/missing.jpg'"></a>
+                    <div class="card-body">
+                    <h5 class="card-title">{{film_list[film].Title}} ({{film_list[film].Year}})</h5>
+                    <p class="card-text">Tipo: {{film_list[film].Type}}</p>
+                    <hr>
+                    <button @click="getDetail(film)" class="btn btn-outline-dark" style="width: 90%;">Dettagli</button>
+                    </div>
+                </div>
+
+                <div v-if="film_list.length != 0 " id="counter">
+                    <p>{{film_list.length}}/{{n_result}}</p>
+                </div>
+                
+                <div v-if="film_list.length != 0 && film_list.length != n_result" class="d-grid gap-2">
+                    <button id="load-more" class="btn btn-info" @click="loadMore()" type="button">Carica altri</button>
+                </div>
+            </div>
+                <div v-if="show_message" id="message"> Nessun risultato trovato</div>
+
+
+              <!-- DETTAGLIO -->
+            <div v-if="seen_detail" style="width: 90%;">
+                <h3 style="margin-left:40%; margin-top:50px; color: aliceblue; ">{{film_detail.Title}} ({{film_detail.Year}})</h3>
+                
+                
+                <div class="container-fluid" style=" width: 65%; text-align: center;">
+                    <img id="img-detail" :src="film_detail.Poster" style=" width: 50%; " onerror="this.src='img/missing.jpg'">
+                </div>
+                
+                <table class="table table-dark table-hover table-striped" style="color: aliceblue; width: 80%; margin:auto;  margin-top:45px; margin-bottom: 40px;">
+                    <tr>
+                        <td><strong><u>Durata:</u></strong></td>
+                        <td style="text-align: right;">{{film_detail.Runtime}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong><u>Uscita:</u></strong></td>
+                        <td style="text-align: right;">{{film_detail.Released}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong><u>Regia:</u></strong></td>
+                        <td style="text-align: right;">{{film_detail.Director}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong><u>Scritto:</u></strong></td>
+                        <td style="text-align: right;">{{film_detail.Writer}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong><u>Genere:</u></strong></td>
+                        <td style="text-align: right;">{{film_detail.Genre}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong><u>Attori:</u></strong></td>
+                        <td style="text-align: right;">{{film_detail.Actors}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong><u>Premi:</u></strong></td>
+                        <td style="text-align: right;">{{film_detail.Awards}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong><u>Box office:</u></strong></td>
+                        <td style="text-align: right;">{{film_detail.BoxOffice}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong><u>Metascore:</u></strong></td>
+                        <td style="text-align: right;">{{film_detail.Metascore}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong><u>IMDB:</u></strong></td>
+                        <td style="text-align: right;">{{film_detail.imdbRating}} ({{film_detail.imdbVotes}} voti)</td>
+                    </tr>
+                    <tr v-for="(index, i) in film_detail.Ratings">
+                        <td><strong><u>{{film_detail.Ratings[i].Source}}:</u></strong></td>
+                        <td style="text-align: right;">{{film_detail.Ratings[i].Value}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong><u>Trama:</u></strong></td>
+                        <td style="text-align: right;">{{film_detail.Plot}}</td>
+                    </tr>
+                </table>
+                <!--
+                <div style="color: aliceblue; width: 70%; margin:auto; text-align: center; margin-top:45px;" class="container-fluid">
+
+                    <p>Durata: {{film_detail.Runtime}}</p>
+                    <p>Uscita: {{film_detail.Released}}</p>
+                    <p>Regia: {{film_detail.Director}}</p>
+                    <p>Scritto: {{film_detail.Writer}}</p>
+                    <p>Genere: {{film_detail.Genre}}</p>
+                    <p>Attori: {{film_detail.Actors}}</p>
+                    <p>Premi: {{film_detail.Awards}}</p>
+                    <p>Box office: {{film_detail.BoxOffice}}</p>
+                    <p>Metascore: {{film_detail.Metascore}}</p>
+                    <p>IMDB: {{film_detail.imdbRating}} ({{film_detail.imdbVotes}} voti)</p>
+                    <p v-for="(index, i) in film_detail.Ratings">{{film_detail.Ratings[i].Source}} {{film_detail.Ratings[i].Value}}</p>
+                    <p>Trama:<br> {{film_detail.Plot}}</p>
+                </div> -->
+
+               
+                
+                
+            </div>
+
+            <div id="alert-message" class="alert alert-warning alert-dismissible fade show fixed-bottom" role="alert" style="margin:auto; margin-bottom:20px; width: 70%;">
+                <strong>Hey!</strong> Non trovato nessun risultato per "{{title_tmp.replace("+"," ").toUpperCase()}}" nella categoria [{{category}}].
+                <button type="button" class="btn-close" onclick="$('#alert-message').hide();" aria-label="Close"></button>
+            </div>
+        </div>
+
+    </body>
+
+    <script >
+
+
+        $(document).ready(function() {
+            $('#alert-message').hide();
+           
+
+        });
+
+        //Gestisco eventi di navigazione con bottoni browser
+        window.addEventListener('hashchange', function(){
+
+            const url = new URL(window.location);
+            console.log(url.hash);
+
+            if(url.hash=="#Home" || url.hash=="")
+                app.toHome();
+
+        });
+
+        var app = new Vue({
+            el: '#app',
+            
+            data: {
+                film_list:[],
+                film_detail:[],
+                n_result:0,
+                title_tmp:"",
+                page: 1,
+               // seen_list:true,
+                seen_list:true,
+                seen_detail:false,
+                show_message:false,
+                category:"",
+                home_result:["blade runner","avengers","matrix","captain","iron man"]
+            },
+
+            methods:{
+                cerca:function(){
+                    $(function() {
+                        app.film_list=[]
+                        var film = $("#cerca").val().replace(" ","+")
+                        var tipo = $("#tipo").val()
+
+                        if(tipo!="")
+                            app.category=tipo.toUpperCase()
+                        else
+                            app.category="ALL"
+                        
+                            app.title_tmp = film;
+                        app.page = 1;
+
+                        if( (film.replace("+","") !== "") ){var settings = {
+                                "url": "https://www.omdbapi.com/?apikey=b13dc6e8&plot=full&s="+film+"&type="+tipo,
+                                "method": "GET",
+                                "timeout": 0,
+                            };
+                                    
+                            $.ajax(settings).done(function (response) {
+                                console.log("Response: "+response);
+
+                                if(response.totalResults==null){
+                                    $('#alert-message').show();
+                                    app.show_message=true
+                                }
+                                else{
+                                    app.film_list = response.Search;
+                                    app.n_result = response.totalResults;
+                                    console.log(app.film_list)
+                                    app.show_message=false
+
+                                }
+                                
+                            });
+                        }
+                            
+                    })
+                    console.log(app.n_result)
+                    app.toHome();
+                },
+
+                loadMore: function(){
+                    app.page = app.page + 1;
+
+                    var settings = {
+                                "url": "https://www.omdbapi.com/?apikey=b13dc6e8&plot=full&s="+app.title_tmp+"&page="+app.page,
+                                "method": "GET",
+                                "timeout": 0,
+                        };
+
+                    $.ajax(settings).done(function (response) {
+                                console.log(response);
+                                app.film_list = app.film_list.concat(response.Search);
+                                console.log(app.film_list)
+                            });
+                },
+
+                getDetail: function(idFilm){
+                    var id = app.film_list[idFilm].imdbID;
+                    console.log(id)
+                    var settings = {
+                                "url": "https://www.omdbapi.com/?apikey=b13dc6e8&plot=full&i="+id,
+                                "method": "GET",
+                                "timeout": 0,
+                    };
+
+                    $.ajax(settings).done(function (response) {
+                                console.log(response);
+                                app.film_detail = response;
+                                app.toDetail();
+                    });
+
+                    
+              
+                },
+
+                toDetail: function(){
+                    app.seen_detail=true
+                    app.seen_list=false
+                    window.location.hash = "#Detail" 
+                },
+
+                toHome: function(){
+                    app.seen_detail=false
+                    app.seen_list=true
+                    window.location.hash ="#Home" 
+                },
+
+                getRandomInt: function (max) {
+                    return Math.floor(Math.random() * max);
+                },
+                
+            }
+        })
+    </script>
+</html>
