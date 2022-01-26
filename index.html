@@ -242,6 +242,7 @@
                 seen_detail:false,
                 show_message:false,
                 category:"",
+                type:"",
                 home_result:["blade runner","avengers","matrix","captain","iron man"]
             },
 
@@ -251,6 +252,8 @@
                         app.film_list=[]
                         var film = $("#cerca").val().replace(" ","+")
                         var tipo = $("#tipo").val()
+
+                        app.type = tipo;
 
                         if(tipo!="")
                             app.category=tipo.toUpperCase()
@@ -293,7 +296,7 @@
                     app.page = app.page + 1;
 
                     var settings = {
-                                "url": "https://www.omdbapi.com/?apikey=b13dc6e8&plot=full&s="+app.title_tmp+"&page="+app.page,
+                                "url": "https://www.omdbapi.com/?apikey=b13dc6e8&plot=full&s="+app.title_tmp+"&page="+app.page+"&type="+app.type,
                                 "method": "GET",
                                 "timeout": 0,
                         };
